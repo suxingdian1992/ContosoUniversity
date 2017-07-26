@@ -9,6 +9,10 @@ namespace ContosoUniversity
 {
     public class RouteConfig
     {
+        /// <summary>
+        /// 路由配置文件
+        /// </summary>
+        /// <param name="routes"></param>
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
