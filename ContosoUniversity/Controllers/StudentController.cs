@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using ContosoUniversity.DAL;
 using ContosoUniversity.Models;
+using PagedList;
 
 namespace ContosoUniversity.Controllers
 {
@@ -16,9 +17,54 @@ namespace ContosoUniversity.Controllers
         private SchoolContext db = new SchoolContext();
 
         // GET: Student
-        public ActionResult Index()
+        public ViewResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            return View(db.Students.ToList());
+            //此处的参数sortOrder是从url中的查询字符串接受参数，该参数将是name
+            //或者date并且字符串desc指定为降序，默认为升序
+            //此处使用两个ViewBag变量，一边试图可以适当的使用适当的查询字符串配置列标题超链接
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewBag.DateSortParm = sortOrder == "Date" ? "date_desc" : "Date";
+            ViewBag.CurrentSort = sortOrder;
+
+            if (searchString != null)
+            {
+                page = 1;//默认页码返回为1
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            //前台排序都会验证是否又过滤，在过滤的基础上进行排序
+            ViewBag.CurrentFilter = searchString;
+
+            var students = from s in db.Students
+                           select s;
+            //注意此处写法，还是查出来了所有的数据，在这个基础上过滤，并不是在数据库查询的时候进行过滤
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                students = students.Where(s => s.LastName.Contains(searchString)
+                                       || s.FirstMidName.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    students = students.OrderByDescending(s => s.LastName);//点击名字按照姓名降序排序
+                    break;
+                case "Date":
+                    students = students.OrderBy(s => s.EnrollmentDate);//默认按照日期升序排序
+                    break;
+                case "date_desc":
+                    students = students.OrderByDescending(s => s.EnrollmentDate);//点击日期按照日期降序排序
+                    break;
+                default:
+                    students = students.OrderBy(s => s.LastName);//默认情况下按照姓氏升序排序
+                    break;
+            }
+            //4条数据一页
+            int pageSize = 4;
+            int pageNumber = (page ?? 1);
+            return View(students.ToPagedList(pageNumber, pageSize));
         }
 
         // GET: Student/Details/5
