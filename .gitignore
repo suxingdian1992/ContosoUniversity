@@ -259,3 +259,11 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/ContosoUniversity/SchoolModel.cs
+/ContosoUniversity/SchoolModel.cs
+/ContosoUniversity/Student.cs
+/ContosoUniversity/OfficeAssignment.cs
+/ContosoUniversity/Instructor.cs
+/ContosoUniversity/Enrollment.cs
+/ContosoUniversity/Department.cs
+/ContosoUniversity/Course.cs
