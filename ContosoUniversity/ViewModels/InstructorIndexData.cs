@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using ContosoUniversity.Models;
 
+/// <summary>
+/// 这是一个视图类，集合了相关的三项属性
+/// </summary>
 namespace ContosoUniversity.ViewModels
 {
     public class InstructorIndexData
