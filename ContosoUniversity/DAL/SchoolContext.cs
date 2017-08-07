@@ -25,6 +25,8 @@ namespace ContosoUniversity.DAL
                 .Map(t => t.MapLeftKey("CourseID")
                     .MapRightKey("InstructorID")
                     .ToTable("CourseInstructor"));
+            //此处配置实体框架使用存储过程对Department进行增删改工作
+            modelBuilder.Entity<Department>().MapToStoredProcedures();
         }
     }
 }
